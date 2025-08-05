@@ -5,6 +5,7 @@ extern crate alloc;
 /// Import items from the SDK. The prelude contains common traits and macros.
 use stylus_sdk::{contract, evm, msg, prelude::*, call::{Call, call}, alloy_primitives::{Address, U256}, abi::Bytes};
 use alloy_sol_types::sol;
+use stylus_cache_sdk::{is_contract_cacheable};
 
 // Define some events using the Solidity ABI.
 sol! {
@@ -78,7 +79,12 @@ pub enum MultiSigError {
 /// Declare that `MultiSig` is a contract with the following external methods.
 #[public]
 impl MultiSig {
-    pub fn num_confirmations_required(&self) -> Result<U256, MultiSigError> {
+
+    pub fn is_cacheable(&self) -> bool {
+        is_contract_cacheable()
+    }
+
+    pub fn num_confirmations_required_isha(&self) -> Result<U256, MultiSigError> {
         Ok(self.num_confirmations_required.get())
     }
 
